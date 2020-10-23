@@ -27,13 +27,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DesappFormComponent,
-    DesappNavComponent,
-    DesappTableComponent,
-    DesappDashboardComponent
-  ],
+  declarations: [AppComponent, DesappFormComponent, DesappNavComponent, DesappTableComponent, DesappDashboardComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -54,9 +48,9 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSortModule,
     MatGridListModule,
     MatMenuModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
