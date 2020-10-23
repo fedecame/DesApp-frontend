@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Project } from '../models/Project';
 
@@ -20,6 +20,13 @@ export class DesappBeApisService {
     // TODO: Cuando este implementado el endpoint en BE, cambiar este código para consumirlo directamente.
     return this.getAllProjects().pipe(
       map((projects) => projects.filter((project) => project.state === 'En Planificacion'))
+    );
+  }
+
+  getRunningOutProjects() {
+    // TODO: Usar un endpoint al que se le pasa un queryParam de "end_date" por ejemplo para no traerme todos y filtrarlos aca.
+    return this.getOpenProjects().pipe(
+      map((projects) => projects.filter((project) => new Date(project.endDate).getMonth == new Date().getMonth))
     );
   }
 }
