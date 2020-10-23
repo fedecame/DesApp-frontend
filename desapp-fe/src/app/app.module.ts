@@ -25,6 +25,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { DesappDashboardComponent } from './desapp-dashboard/desapp-dashboard.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [AppComponent, DesappFormComponent, DesappNavComponent, DesappTableComponent, DesappDashboardComponent],
@@ -49,6 +50,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatGridListModule,
     MatMenuModule,
     HttpClientModule,
+    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -9,9 +9,11 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item (click)="fetchProjects()" style="cursor: pointer">My Projects</a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
+      <a mat-list-item href="#"><mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon>Home</a>
+      <a mat-list-item (click)="fetchProjects()" style="cursor: pointer"
+        ><mat-icon aria-hidden="false" aria-label="My Projects icon">loyalty</mat-icon>My Projects</a
+      >
+      <a mat-list-item href="#"><mat-icon aria-hidden="false" aria-label="About us icon">info</mat-icon>About us</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -26,6 +28,12 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>[CSAC] Crowdfunding Solidario Argentina Conectada</span>
+      <span class="toolbar-spacer"></span>
+      <fa-icon [icon]="faUserCircle" size="2x" [matMenuTriggerFor]="menu" class="user-avatar"></fa-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="goToProfile()"><span>Profile</span></button>
+        <button mat-menu-item><span>My Projects</span></button>
+      </mat-menu>
     </mat-toolbar>
     <!-- Add Content Here -->
     <ng-content></ng-content>

@@ -1,3 +1,22 @@
 .full-width-table {
   width: 100%;
 }
+
+.project-table-container {
+  padding: 2rem 3rem;
+}
+
+.table-title {
+  background-color: grey;
+  width: fit-content;
+  padding: 0.7rem;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.row-hoverable {
+  &:hover {
+    filter: brightness(1.2);
+    cursor: pointer;
+  }
+}

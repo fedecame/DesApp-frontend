@@ -5,33 +5,22 @@ import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 
 // TODO: Replace this with your own data model type
-export interface DesappTableItem {
+export interface DesappProjectTableItem {
   name: string;
-  id: number;
+  participantsAmount: number;
+  collectedAmount: number;
+  collectedPercentage: number;
 }
 
 // TODO: replace this with real data from your application
-const EXAMPLE_DATA: DesappTableItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'},
+const EXAMPLE_DATA: DesappProjectTableItem[] = [
+  { name: 'proyecto1', participantsAmount: 55, collectedAmount: 1350, collectedPercentage: 50.2 },
+  { name: 'proyecto2', participantsAmount: 123, collectedAmount: 420, collectedPercentage: 24.6 },
+  { name: 'proyecto3', participantsAmount: 7, collectedAmount: 5555, collectedPercentage: 88.9 },
+  { name: 'proyecto4', participantsAmount: 0, collectedAmount: 789, collectedPercentage: 6.6 },
+  { name: 'proyecto5', participantsAmount: 44, collectedAmount: 678, collectedPercentage: 31.05 },
+  { name: 'proyecto6', participantsAmount: 34, collectedAmount: 123, collectedPercentage: 2.4 },
+  { name: 'proyecto7', participantsAmount: 69, collectedAmount: 66, collectedPercentage: 5.55 },
 ];
 
 /**
@@ -39,8 +28,8 @@ const EXAMPLE_DATA: DesappTableItem[] = [
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class DesappTableDataSource extends DataSource<DesappTableItem> {
-  data: DesappTableItem[] = EXAMPLE_DATA;
+export class DesappTableDataSource extends DataSource<DesappProjectTableItem> {
+  data: DesappProjectTableItem[] = EXAMPLE_DATA;
   paginator: MatPaginator;
   sort: MatSort;
 
@@ -53,18 +42,16 @@ export class DesappTableDataSource extends DataSource<DesappTableItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<DesappTableItem[]> {
+  connect(): Observable<DesappProjectTableItem[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
-    const dataMutations = [
-      observableOf(this.data),
-      this.paginator.page,
-      this.sort.sortChange
-    ];
+    const dataMutations = [observableOf(this.data), this.paginator.page, this.sort.sortChange];
 
-    return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
-    }));
+    return merge(...dataMutations).pipe(
+      map(() => {
+        return this.getPagedData(this.getSortedData([...this.data]));
+      })
+    );
   }
 
   /**
@@ -77,7 +64,7 @@ export class DesappTableDataSource extends DataSource<DesappTableItem> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: DesappTableItem[]) {
+  private getPagedData(data: DesappProjectTableItem[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -86,7 +73,7 @@ export class DesappTableDataSource extends DataSource<DesappTableItem> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: DesappTableItem[]) {
+  private getSortedData(data: DesappProjectTableItem[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -94,9 +81,16 @@ export class DesappTableDataSource extends DataSource<DesappTableItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'id': return compare(+a.id, +b.id, isAsc);
-        default: return 0;
+        case 'name':
+          return compare(a.name, b.name, isAsc);
+        case 'participants_amount':
+          return compare(+a.participantsAmount, +b.participantsAmount, isAsc);
+        case 'collected_amount':
+          return compare(+a.collectedAmount, +b.collectedAmount, isAsc);
+        case 'collected_percentage':
+          return compare(+a.collectedPercentage, +b.collectedPercentage, isAsc);
+        default:
+          return 0;
       }
     });
   }
