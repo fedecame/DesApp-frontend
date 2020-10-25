@@ -26,9 +26,10 @@ import { DesappDashboardComponent } from './desapp-dashboard/desapp-dashboard.co
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DesappProjectListsComponent } from './desapp-project-lists/desapp-project-lists.component';
 
 @NgModule({
-  declarations: [AppComponent, DesappFormComponent, DesappNavComponent, DesappTableComponent, DesappDashboardComponent],
+  declarations: [AppComponent, DesappFormComponent, DesappNavComponent, DesappTableComponent, DesappDashboardComponent, DesappProjectListsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

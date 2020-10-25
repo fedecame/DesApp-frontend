@@ -1,11 +1,13 @@
 import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
+import { catchError, finalize, map, startWith, tap } from 'rxjs/operators';
+import { Observable, of as observableOf, merge, combineLatest, BehaviorSubject, of, Subject } from 'rxjs';
+import { Project } from '../models/Project';
+import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
 
 // TODO: Replace this with your own data model type
-export interface DesappProjectTableItem {
+export interface ProjectTableItem {
   name: string;
   participantsAmount: number;
   collectedAmount: number;
@@ -13,7 +15,7 @@ export interface DesappProjectTableItem {
 }
 
 // TODO: replace this with real data from your application
-const EXAMPLE_DATA: DesappProjectTableItem[] = [
+const EXAMPLE_DATA: ProjectTableItem[] = [
   { name: 'proyecto1', participantsAmount: 55, collectedAmount: 1350, collectedPercentage: 50.2 },
   { name: 'proyecto2', participantsAmount: 123, collectedAmount: 420, collectedPercentage: 24.6 },
   { name: 'proyecto3', participantsAmount: 7, collectedAmount: 5555, collectedPercentage: 88.9 },
@@ -28,12 +30,17 @@ const EXAMPLE_DATA: DesappProjectTableItem[] = [
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class DesappTableDataSource extends DataSource<DesappProjectTableItem> {
-  data: DesappProjectTableItem[] = EXAMPLE_DATA;
+export class DesappTableDataSource extends DataSource<ProjectTableItem> {
+  private projectsTISubject = new BehaviorSubject<ProjectTableItem[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false); // TODO: Todavia no se esta usando el loading, la idea es poner un spinner mientras se traen los datos del BE.
+
+  loading$ = this.loadingSubject.asObservable();
+  projectsTI$ = this.projectsTISubject.asObservable();
+
   paginator: MatPaginator;
   sort: MatSort;
 
-  constructor() {
+  constructor(private getProjectsTI$: Observable<ProjectTableItem[]>) {
     super();
   }
 
@@ -42,16 +49,8 @@ export class DesappTableDataSource extends DataSource<DesappProjectTableItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<DesappProjectTableItem[]> {
-    // Combine everything that affects the rendered data into one update
-    // stream for the data-table to consume.
-    const dataMutations = [observableOf(this.data), this.paginator.page, this.sort.sortChange];
-
-    return merge(...dataMutations).pipe(
-      map(() => {
-        return this.getPagedData(this.getSortedData([...this.data]));
-      })
-    );
+  connect(): Observable<ProjectTableItem[]> {
+    return this.projectsTI$.pipe(map((projects) => this.getPagedData(this.getSortedData(projects))));
   }
 
   /**
@@ -60,11 +59,24 @@ export class DesappTableDataSource extends DataSource<DesappProjectTableItem> {
    */
   disconnect() {}
 
+  getProjectsTIs() {
+    this.loadingSubject.next(true);
+
+    this.getProjectsTI$
+      .pipe(
+        catchError(() => of([])), // TODO: Aca podria mostrar un Dialog o un Alert para indicar que falló el request.
+        finalize(() => this.loadingSubject.next(false))
+      )
+      .subscribe((projectsTI) => {
+        this.projectsTISubject.next([...projectsTI]);
+      });
+  }
+
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: DesappProjectTableItem[]) {
+  private getPagedData(data: ProjectTableItem[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -73,7 +85,7 @@ export class DesappTableDataSource extends DataSource<DesappProjectTableItem> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: DesappProjectTableItem[]) {
+  private getSortedData(data: ProjectTableItem[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }

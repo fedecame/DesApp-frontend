@@ -26,7 +26,13 @@ export class DesappBeApisService {
   getRunningOutProjects() {
     // TODO: Usar un endpoint al que se le pasa un queryParam de "end_date" por ejemplo para no traerme todos y filtrarlos aca.
     return this.getOpenProjects().pipe(
-      map((projects) => projects.filter((project) => new Date(project.endDate).getMonth == new Date().getMonth))
+      map((projects) =>
+        projects.filter((project) => {
+          const projectEndDate = new Date(project.endDate);
+          const today = new Date();
+          return projectEndDate.getFullYear === today.getFullYear && projectEndDate.getMonth === today.getMonth;
+        })
+      )
     );
   }
 }
