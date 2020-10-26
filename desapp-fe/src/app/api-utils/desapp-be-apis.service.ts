@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 
 import { Project } from '../models/Project';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +49,9 @@ export class DesappBeApisService {
         date: new Date().toISOString().split('T')[0],
       })
       .subscribe();
+  }
+
+  getUser(userId: number) {
+    return this.http.get<User>(`${this.BASE_URL}/users/${userId}`);
   }
 }

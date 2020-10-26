@@ -36,6 +36,7 @@ import { DesappPageNotFoundComponent } from './desapp-page-not-found/desapp-page
 import { DesappProfileComponent } from './desapp-profile/desapp-profile.component';
 import { DesappDonationDialogComponent } from './desapp-donation-dialog/desapp-donation-dialog.component';
 import { DesappOnlyNumbersDirective } from './desapp-only-numbers.directive';
+import { DesappUserTableComponent } from './desapp-user-table/desapp-user-table.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { DesappOnlyNumbersDirective } from './desapp-only-numbers.directive';
     DesappProfileComponent,
     DesappDonationDialogComponent,
     DesappOnlyNumbersDirective,
+    DesappUserTableComponent,
   ],
   imports: [
     BrowserModule,

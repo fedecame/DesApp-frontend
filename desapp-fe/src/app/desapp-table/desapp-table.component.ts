@@ -54,11 +54,6 @@ export class DesappTableComponent implements AfterViewInit, OnInit, OnDestroy {
     this.sort.sortChange.subscribe(() => this.dataSource.getProjectsTIs());
   }
 
-  selectProject(event, projectId) {
-    console.log('Project selected! Event: ', event);
-    console.log('Project extra args: ', projectId);
-  }
-
   ngOnDestroy() {
     this.paginator.page.unsubscribe();
     this.sort.sortChange.unsubscribe();

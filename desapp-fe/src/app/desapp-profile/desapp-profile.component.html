@@ -1,1 +1,35 @@
-<p>desapp-profile works!</p>
+<div class="grid-container">
+  <h1 class="mat-h1">{{ (user$ | async)?.username }}</h1>
+  <mat-grid-list cols="2" rowHeight="350px">
+    <mat-grid-tile *ngFor="let card of cards$ | async" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{ card.title }}
+            <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu> -->
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <mat-list role="list">
+            <mat-list-item class="card-field-row" role="listitem" *ngFor="let field of card.fields; let i = index"
+              ><div class="card-field-label">{{ field.label }}:</div>
+              <div class="card-field-value">{{ field.value }}</div>
+              <mat-divider *ngIf="i < card.fields.length - 1"></mat-divider
+            ></mat-list-item>
+          </mat-list>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-flat-button color="primary" class="change-pass-button" (click)="openChangePassDialog()">
+            Change Password
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

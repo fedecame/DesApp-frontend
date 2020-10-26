@@ -53,7 +53,7 @@ export class DesappProjectDetailComponent implements OnInit {
         map((project) => {
           return {
             ...project,
-            missingPercentage: this.calcularPorcentajeFaltante(project),
+            missingPercentage: this.calcularPorcentajeFaltante(project), // TODO: esto deberia venir directamente del BE.
           };
         })
       );
