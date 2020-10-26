@@ -30,7 +30,7 @@
       mat-row
       *matRowDef="let row; columns: displayedColumns"
       [ngClass]="'row-hoverable'"
-      (click)="selectProject($event)"
+      [routerLink]="['/projects', row.id]"
     ></tr>
   </table>
 

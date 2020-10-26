@@ -8,7 +8,7 @@ export interface Project {
   factor: number;
   id: number;
   location: LocationDesApp;
-  minclosePercentage: number;
+  minClosePercentage: number;
   name: string;
   raisedFunds: number;
   startDate: string;

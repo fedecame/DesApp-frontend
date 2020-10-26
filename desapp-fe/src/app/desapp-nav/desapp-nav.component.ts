@@ -26,9 +26,4 @@ export class DesappNavComponent {
       console.log('All projects: ', projects);
     });
   }
-
-  goToProfile() {
-    // TODO: Hacer el ruteo a /profile.
-    console.log('Route to /profile');
-  }
 }

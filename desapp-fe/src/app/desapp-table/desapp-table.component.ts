@@ -32,6 +32,7 @@ export class DesappTableComponent implements AfterViewInit, OnInit, OnDestroy {
         map((projects) => {
           return projects.map((project) => {
             return {
+              id: project.id,
               name: project.name,
               participantsAmount: project.users.length, // TODO: Cambiar esto en lo posible, que el BE me de la cantidad de participantes.
               collectedAmount: project.raisedFunds,
@@ -53,8 +54,9 @@ export class DesappTableComponent implements AfterViewInit, OnInit, OnDestroy {
     this.sort.sortChange.subscribe(() => this.dataSource.getProjectsTIs());
   }
 
-  selectProject(event) {
+  selectProject(event, projectId) {
     console.log('Project selected! Event: ', event);
+    console.log('Project extra args: ', projectId);
   }
 
   ngOnDestroy() {

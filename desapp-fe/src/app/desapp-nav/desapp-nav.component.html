@@ -9,11 +9,15 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item href="#"><mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon>Home</a>
-      <a mat-list-item (click)="fetchProjects()" style="cursor: pointer"
+      <a mat-list-item routerLinkActive="active-route" routerLink="/home"
+        ><mat-icon aria-hidden="false" aria-label="Home icon">home</mat-icon>Home</a
+      >
+      <a class="disabled" mat-list-item (click)="fetchProjects()" style="cursor: pointer"
         ><mat-icon aria-hidden="false" aria-label="My Projects icon">loyalty</mat-icon>My Projects</a
       >
-      <a mat-list-item href="#"><mat-icon aria-hidden="false" aria-label="About us icon">info</mat-icon>About us</a>
+      <a mat-list-item routerLinkActive="active-route" routerLink="/about-us"
+        ><mat-icon aria-hidden="false" aria-label="About us icon">info</mat-icon>About us</a
+      >
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -31,8 +35,9 @@
       <span class="toolbar-spacer"></span>
       <fa-icon [icon]="faUserCircle" size="2x" [matMenuTriggerFor]="menu" class="user-avatar"></fa-icon>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="goToProfile()"><span>Profile</span></button>
-        <button mat-menu-item><span>My Projects</span></button>
+        <button mat-menu-item routerLinkActive="active-route" routerLink="/profile"><span>Profile</span></button>
+        <button mat-menu-item disabled><span>My Projects</span></button>
+        <button mat-menu-item routerLink="/login"><span>Logout</span></button>
       </mat-menu>
     </mat-toolbar>
     <!-- Add Content Here -->

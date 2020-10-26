@@ -1,3 +1,9 @@
+<!-- <app-desapp-dashboard
+  [project$]="this.project$"
+  [location$]="this.location$"
+  [users$]="this.users$"
+></app-desapp-dashboard> -->
+
 <div class="grid-container">
   <h1 class="mat-h1">{{ (project$ | async)?.name }}</h1>
   <mat-grid-list cols="2" rowHeight="350px">
@@ -23,8 +29,10 @@
               <mat-divider *ngIf="i < card.fields.length - 1"></mat-divider
             ></mat-list-item>
           </mat-list>
-          <div>Card Content Here</div>
         </mat-card-content>
+        <mat-card-actions *ngIf="card.fields?.length < 4">
+          <button mat-raised-button color="warn" class="donation-button">Donate</button>
+        </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>

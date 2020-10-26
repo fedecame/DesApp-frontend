@@ -1,9 +1,17 @@
+@import '~src/_variables.scss';
+
 .sidenav-container {
   height: 100%;
 }
 
 .sidenav {
   width: 200px;
+
+  a.disabled {
+    $currentColor: currentColor;
+    pointer-events: none;
+    filter: brightness(60%);
+  }
 }
 
 .sidenav .mat-toolbar {
@@ -26,4 +34,10 @@
   &:hover {
     filter: brightness(0.8);
   }
+}
+
+.active-route {
+  font-weight: bold;
+  font-size: larger;
+  color: $warn;
 }

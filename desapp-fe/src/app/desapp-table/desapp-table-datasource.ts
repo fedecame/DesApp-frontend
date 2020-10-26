@@ -8,6 +8,7 @@ import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
 
 // TODO: Replace this with your own data model type
 export interface ProjectTableItem {
+  id: number;
   name: string;
   participantsAmount: number;
   collectedAmount: number;
@@ -16,13 +17,13 @@ export interface ProjectTableItem {
 
 // TODO: replace this with real data from your application
 const EXAMPLE_DATA: ProjectTableItem[] = [
-  { name: 'proyecto1', participantsAmount: 55, collectedAmount: 1350, collectedPercentage: 50.2 },
-  { name: 'proyecto2', participantsAmount: 123, collectedAmount: 420, collectedPercentage: 24.6 },
-  { name: 'proyecto3', participantsAmount: 7, collectedAmount: 5555, collectedPercentage: 88.9 },
-  { name: 'proyecto4', participantsAmount: 0, collectedAmount: 789, collectedPercentage: 6.6 },
-  { name: 'proyecto5', participantsAmount: 44, collectedAmount: 678, collectedPercentage: 31.05 },
-  { name: 'proyecto6', participantsAmount: 34, collectedAmount: 123, collectedPercentage: 2.4 },
-  { name: 'proyecto7', participantsAmount: 69, collectedAmount: 66, collectedPercentage: 5.55 },
+  { id: 1, name: 'proyecto1', participantsAmount: 55, collectedAmount: 1350, collectedPercentage: 50.2 },
+  { id: 2, name: 'proyecto2', participantsAmount: 123, collectedAmount: 420, collectedPercentage: 24.6 },
+  { id: 3, name: 'proyecto3', participantsAmount: 7, collectedAmount: 5555, collectedPercentage: 88.9 },
+  { id: 4, name: 'proyecto4', participantsAmount: 0, collectedAmount: 789, collectedPercentage: 6.6 },
+  { id: 5, name: 'proyecto5', participantsAmount: 44, collectedAmount: 678, collectedPercentage: 31.05 },
+  { id: 6, name: 'proyecto6', participantsAmount: 34, collectedAmount: 123, collectedPercentage: 2.4 },
+  { id: 7, name: 'proyecto7', participantsAmount: 69, collectedAmount: 66, collectedPercentage: 5.55 },
 ];
 
 /**

@@ -35,4 +35,8 @@ export class DesappBeApisService {
       )
     );
   }
+
+  getProject(projectId: number) {
+    return this.http.get<Project>(`${this.BASE_URL}/projects/${projectId}`);
+  }
 }
