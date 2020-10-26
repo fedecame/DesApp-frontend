@@ -1,17 +1,27 @@
 import { state } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
-import { Donation } from '../models/Donation';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Donation } from '../models/Donation';
 import { LocationDesApp } from '../models/LocationDesApp';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
+import { DesappDonationDialogComponent } from '../desapp-donation-dialog/desapp-donation-dialog.component';
 
 export interface ProjectDetailItem extends Project {
   missingPercentage: number;
+}
+
+export interface DialogData {
+  projectName: string;
+  projectId: string;
+  donationAmount: number;
+  donationComment: string;
 }
 
 @Component({
@@ -25,11 +35,13 @@ export class DesappProjectDetailComponent implements OnInit {
   users$: Observable<User[]>;
 
   cards$: Observable<any>;
+  project: Project;
 
   constructor(
     private route: ActivatedRoute,
     private desappApis: DesappBeApisService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +59,9 @@ export class DesappProjectDetailComponent implements OnInit {
       );
 
       this.cards$ = combineLatest([this.breakpointObserver.observe(Breakpoints.Handset), this.project$]).pipe(
+        tap(([_, project]) => {
+          this.project = project;
+        }),
         map(([{ matches }, project]) => {
           if (matches) {
             return [
@@ -113,6 +128,35 @@ export class DesappProjectDetailComponent implements OnInit {
     const cantidadNecesaria = (maximoRequerido * project.minClosePercentage) / 100;
     const procentajeAcumuladoParaCantNecesaria = (project.raisedFunds / cantidadNecesaria) * 100;
     return 100 - procentajeAcumuladoParaCantNecesaria;
+  }
+
+  openDonationDialog(event): void {
+    console.log('event: ', event);
+    console.log('project: ', this.project);
+    const dialogRef = this.dialog.open(DesappDonationDialogComponent, {
+      data: {
+        projectName: this.project.name,
+        projectId: this.project.id,
+        donationAmount: 0,
+        donationComment: '',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      console.log('reulstadoo: ', result);
+      if (result !== undefined && result.amount > 0) {
+        this.desappApis.donate({
+          projectId: this.project.id,
+          userId: 1,
+          amount: result.amount,
+          comment: result.comment,
+        });
+      }
+      // console.log('this.donationAmount: ', this.donationAmount);
+      // console.log('this.donationComment: ', this.donationComment);
+      // this.animal = result;
+    });
   }
 }
 

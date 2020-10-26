@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>
+  Donation for Project: <strong>{{ data?.projectName }}</strong>
+</h1>
+<div mat-dialog-content>
+  <p>How much do you want to donate?</p>
+  <mat-form-field>
+    <mat-label>Donation amount</mat-label>
+    <input matInput [(ngModel)]="data.donationAmount" appOnlyNumber="true" />
+  </mat-form-field>
+</div>
+<div mat-dialog-content>
+  <p>Want to add a comment?</p>
+  <mat-form-field>
+    <mat-label>Donation comment</mat-label>
+    <input matInput [(ngModel)]="data.donationComment" />
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onCancelClick()">No Thanks</button>
+  <button
+    mat-button
+    [mat-dialog-close]="{ amount: data.donationAmount, comment: data.donationComment }"
+    cdkFocusInitial
+  >
+    Ok
+  </button>
+</div>

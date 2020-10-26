@@ -39,4 +39,14 @@ export class DesappBeApisService {
   getProject(projectId: number) {
     return this.http.get<Project>(`${this.BASE_URL}/projects/${projectId}`);
   }
+
+  donate(reqData: { projectId: number; userId: number; amount: number; comment: string }) {
+    return this.http
+      .post(`${this.BASE_URL}/donations/project/${reqData.projectId}/user/${reqData.userId}`, {
+        amount: reqData.amount,
+        comment: reqData.comment,
+        date: new Date().toISOString().split('T')[0],
+      })
+      .subscribe();
+  }
 }

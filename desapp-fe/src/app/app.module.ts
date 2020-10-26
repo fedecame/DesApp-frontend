@@ -11,7 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DesappNavComponent } from './desapp-nav/desapp-nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -33,9 +34,26 @@ import { DesappLoginComponent } from './desapp-login/desapp-login.component';
 import { DesappRegisterComponent } from './desapp-register/desapp-register.component';
 import { DesappPageNotFoundComponent } from './desapp-page-not-found/desapp-page-not-found.component';
 import { DesappProfileComponent } from './desapp-profile/desapp-profile.component';
+import { DesappDonationDialogComponent } from './desapp-donation-dialog/desapp-donation-dialog.component';
+import { DesappOnlyNumbersDirective } from './desapp-only-numbers.directive';
 
 @NgModule({
-  declarations: [AppComponent, DesappFormComponent, DesappNavComponent, DesappTableComponent, DesappDashboardComponent, DesappProjectListsComponent, DesappProjectDetailComponent, DesappNavLayoutComponent, DesappLoginComponent, DesappRegisterComponent, DesappPageNotFoundComponent, DesappProfileComponent],
+  declarations: [
+    AppComponent,
+    DesappFormComponent,
+    DesappNavComponent,
+    DesappTableComponent,
+    DesappDashboardComponent,
+    DesappProjectListsComponent,
+    DesappProjectDetailComponent,
+    DesappNavLayoutComponent,
+    DesappLoginComponent,
+    DesappRegisterComponent,
+    DesappPageNotFoundComponent,
+    DesappProfileComponent,
+    DesappDonationDialogComponent,
+    DesappOnlyNumbersDirective,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -46,6 +64,8 @@ import { DesappProfileComponent } from './desapp-profile/desapp-profile.componen
     MatRadioModule,
     MatCardModule,
     ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,

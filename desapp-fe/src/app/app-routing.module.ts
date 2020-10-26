@@ -15,7 +15,7 @@ const routes: Routes = [
     children: [
       { path: 'home', component: DesappProjectListsComponent },
       { path: 'profile', component: DesappProfileComponent },
-      { path: 'projects/:id', component: DesappProjectDetailComponent }, //Aca la idea es tener /projects/:project_id o algo asi
+      { path: 'projects/:id', component: DesappProjectDetailComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
