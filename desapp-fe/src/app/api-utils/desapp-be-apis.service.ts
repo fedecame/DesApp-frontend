@@ -31,7 +31,7 @@ export class DesappBeApisService {
         projects.filter((project) => {
           const projectEndDate = new Date(project.endDate);
           const today = new Date();
-          return projectEndDate.getFullYear === today.getFullYear && projectEndDate.getMonth === today.getMonth;
+          return projectEndDate.getFullYear() === today.getFullYear() && projectEndDate.getMonth() === today.getMonth();
         })
       )
     );
@@ -46,7 +46,6 @@ export class DesappBeApisService {
       .post(`${this.BASE_URL}/donations/project/${reqData.projectId}/user/${reqData.userId}`, {
         amount: reqData.amount,
         comment: reqData.comment,
-        date: new Date().toISOString().split('T')[0],
       })
       .subscribe();
   }

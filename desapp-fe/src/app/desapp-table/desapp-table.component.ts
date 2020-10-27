@@ -2,8 +2,8 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
 import { Project } from '../models/Project';
 import { DesappTableDataSource, ProjectTableItem } from './desapp-table-datasource';
@@ -15,7 +15,7 @@ import { DesappTableDataSource, ProjectTableItem } from './desapp-table-datasour
 })
 export class DesappTableComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() title = 'Projects';
-  @Input() projects$: Observable<Project[]> = this.desapApiService.getAllProjects();
+  @Input() projects$: Observable<Project[]> = of([]);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<ProjectTableItem>;

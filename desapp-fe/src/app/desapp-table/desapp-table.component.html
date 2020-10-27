@@ -22,7 +22,7 @@
     <!-- Collected Percentage Column -->
     <ng-container matColumnDef="collected_percentage">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Collected Percentage</th>
-      <td mat-cell *matCellDef="let project">{{ project.collectedPercentage }} %</td>
+      <td mat-cell *matCellDef="let project">{{ project.collectedPercentage | number }} %</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -38,7 +38,7 @@
     #paginator
     [length]="(projects$ | async)?.length"
     [pageIndex]="0"
-    [pageSize]="2"
+    [pageSize]="4"
     [pageSizeOptions]="[2, 4, 10, 20, 50]"
   >
   </mat-paginator>
