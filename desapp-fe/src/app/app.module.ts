@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,6 +38,11 @@ import { DesappDonationDialogComponent } from './desapp-donation-dialog/desapp-d
 import { DesappOnlyNumbersDirective } from './desapp-only-numbers.directive';
 import { DesappUserTableComponent } from './desapp-user-table/desapp-user-table.component';
 
+// Import the module from the SDK
+import { AuthModule, AuthHttpInterceptor, HttpMethod } from '@auth0/auth0-angular';
+import { environment as env } from '../environments/environment';
+import { AuthButtonComponent } from './auth-button/auth-button.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +60,7 @@ import { DesappUserTableComponent } from './desapp-user-table/desapp-user-table.
     DesappDonationDialogComponent,
     DesappOnlyNumbersDirective,
     DesappUserTableComponent,
+    AuthButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,8 +86,79 @@ import { DesappUserTableComponent } from './desapp-user-table/desapp-user-table.
     MatMenuModule,
     HttpClientModule,
     FontAwesomeModule,
+    // Import the module into the application, with configuration
+    AuthModule.forRoot({
+      domain: 'dev-lyitcq2e.us.auth0.com',
+      clientId: '3etdg1cgh46Nfa3Fyw9jE4N3Vuqlgys8',
+      audience: 'http://localhost:8090',
+      httpInterceptor: {
+        allowedList: [
+          {
+            uri: 'http://localhost:8090/*',
+            tokenOptions: {
+              audience: 'http://localhost:8090',
+            },
+          },
+          // {
+          //   uri: `${env.dev.apiUrl}/projects/*`,
+          //   httpMethod: HttpMethod.Get,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //   },
+          // },
+          // {
+          //   uri: `${env.dev.apiUrl}/projects/*`,
+          //   httpMethod: HttpMethod.Delete,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //     scope: 'delete:project',
+          //   },
+          // },
+          // {
+          //   uri: `${env.dev.apiUrl}/projects/*`,
+          //   httpMethod: HttpMethod.Post,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //     scope: 'write:project',
+          //   },
+          // },
+          // {
+          //   uri: `${env.dev.apiUrl}/projects/*`,
+          //   httpMethod: HttpMethod.Put,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //     scope: 'write:project',
+          //   },
+          // },
+          // {
+          //   uri: `${env.dev.apiUrl}/users/*`,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //   },
+          // },
+          // {
+          //   uri: `${env.dev.apiUrl}/donations/*`,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //   },
+          // },
+          // {
+          //   uri: `${env.dev.apiUrl}/login`,
+          //   tokenOptions: {
+          //     audience: env.auth.audience,
+          //   },
+          // },
+        ],
+      },
+    }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

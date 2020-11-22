@@ -4,17 +4,19 @@ import { map, tap } from 'rxjs/operators';
 
 import { Project } from '../models/Project';
 import { User } from '../models/User';
+import { environment as env } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DesappBeApisService {
+  // BASE_URL = env.dev.apiUrl;
   BASE_URL = 'http://localhost:8090';
 
   constructor(private http: HttpClient) {}
 
   getAllProjects() {
-    return this.http.get<Project[]>(`${this.BASE_URL}/projects/`);
+    return this.http.get<Project[]>(`${this.BASE_URL}/projects`);
   }
 
   getOpenProjects() {
@@ -50,7 +52,17 @@ export class DesappBeApisService {
       .subscribe();
   }
 
-  getUser(userId: number) {
-    return this.http.get<User>(`${this.BASE_URL}/users/${userId}`);
+  postLoginWithMail(email: string) {
+    return this.http.post(`${this.BASE_URL}/login`, {
+      email: email,
+    });
+  }
+
+  getUserByMail(email: string) {
+    return this.http.get<User>(`${this.BASE_URL}/users/${email}`);
+  }
+
+  loginValidateWithBE() {
+    return this.http.get<string>(`${this.BASE_URL}/login`);
   }
 }

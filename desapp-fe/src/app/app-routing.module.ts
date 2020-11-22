@@ -8,14 +8,17 @@ import { DesappProjectDetailComponent } from './desapp-project-detail/desapp-pro
 import { DesappProjectListsComponent } from './desapp-project-lists/desapp-project-lists.component';
 import { DesappRegisterComponent } from './desapp-register/desapp-register.component';
 
+import { AuthGuard } from '@auth0/auth0-angular';
+
 const routes: Routes = [
   {
     path: '',
     component: DesappNavLayoutComponent,
     children: [
       { path: 'home', component: DesappProjectListsComponent },
-      { path: 'profile', component: DesappProfileComponent },
-      { path: 'projects/:id', component: DesappProjectDetailComponent },
+      { path: 'profile', component: DesappProfileComponent, canActivate: [AuthGuard] },
+      { path: 'projects/:id', component: DesappProjectDetailComponent, canActivate: [AuthGuard] },
+      // { path: 'login', component: DesappLoginComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },
