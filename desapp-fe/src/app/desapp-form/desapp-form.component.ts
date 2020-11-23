@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { FieldConfig } from '../models/FieldConfig';
 
 @Component({
   selector: 'app-desapp-form',
@@ -7,6 +9,11 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./desapp-form.component.scss'],
 })
 export class DesappFormComponent {
+  @Input() form: FormGroup;
+  @Input() formFields: FieldConfig[] = [];
+  @Input() formTitle: string;
+  @Output() onSubmit = new EventEmitter();
+
   addressForm = this.fb.group({
     company: null,
     firstName: [null, Validators.required],
@@ -85,7 +92,8 @@ export class DesappFormComponent {
 
   constructor(private fb: FormBuilder) {}
 
-  onSubmit() {
-    alert('Thanks!');
-  }
+  // onSubmit(event) {
+  //   console.log('event: ', event);
+  //   alert('Thanks!');
+  // }
 }

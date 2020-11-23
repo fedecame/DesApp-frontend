@@ -7,7 +7,8 @@ export const environment = {
   auth: {
     domain: 'dev-lyitcq2e.us.auth0.com',
     clientId: '3etdg1cgh46Nfa3Fyw9jE4N3Vuqlgys8',
-    // redirectUri: window.location.origin,
+    redirectUri: window.location.origin,
+    // redirectUri: 'http://localhost:4200/login',
     audience: 'http://localhost:8090',
   },
   dev: {

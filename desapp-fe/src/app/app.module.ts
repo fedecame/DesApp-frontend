@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DesappNavComponent } from './desapp-nav/desapp-nav.component';
@@ -42,6 +44,8 @@ import { DesappUserTableComponent } from './desapp-user-table/desapp-user-table.
 import { AuthModule, AuthHttpInterceptor, HttpMethod } from '@auth0/auth0-angular';
 import { environment as env } from '../environments/environment';
 import { AuthButtonComponent } from './auth-button/auth-button.component';
+import { DesappCompleteUserDataComponent } from './desapp-complete-user-data/desapp-complete-user-data.component';
+import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/desapp-dynamic-form-field.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +65,8 @@ import { AuthButtonComponent } from './auth-button/auth-button.component';
     DesappOnlyNumbersDirective,
     DesappUserTableComponent,
     AuthButtonComponent,
+    DesappCompleteUserDataComponent,
+    DesappDynamicFormFieldComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,14 +89,17 @@ import { AuthButtonComponent } from './auth-button/auth-button.component';
     MatPaginatorModule,
     MatSortModule,
     MatGridListModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatMenuModule,
     HttpClientModule,
     FontAwesomeModule,
     // Import the module into the application, with configuration
     AuthModule.forRoot({
-      domain: 'dev-lyitcq2e.us.auth0.com',
-      clientId: '3etdg1cgh46Nfa3Fyw9jE4N3Vuqlgys8',
-      audience: 'http://localhost:8090',
+      ...env.auth,
+      // domain: 'dev-lyitcq2e.us.auth0.com',
+      // clientId: '3etdg1cgh46Nfa3Fyw9jE4N3Vuqlgys8',
+      // audience: 'http://localhost:8090',
       httpInterceptor: {
         allowedList: [
           {

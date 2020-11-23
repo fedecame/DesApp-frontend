@@ -1,0 +1,40 @@
+<div [formGroup]="formGroup">
+  <mat-form-field [ngClass]="fieldConfig.cssClasses">
+    <mat-label>{{ fieldConfig.label }}</mat-label>
+    <ng-container [ngSwitch]="fieldConfig.type">
+      <textarea
+        matInput
+        *ngSwitchCase="'textarea'"
+        [placeholder]="fieldConfig.options['placeholder']"
+        [formControlName]="fieldConfig.key"
+      ></textarea>
+      <mat-select *ngSwitchCase="'select'">
+        <mat-option *ngFor="let opt of fieldConfig.options['selectOptions']" [value]="opt.key">
+          {{ opt.value }}
+        </mat-option>
+      </mat-select>
+      <input
+        matInput
+        *ngSwitchDefault
+        [placeholder]="fieldConfig.options['placeholder']"
+        [type]="fieldConfig.options['inputType']"
+        [formControlName]="fieldConfig.key"
+      />
+    </ng-container>
+    <!-- <ng-container *ngFor="let error of fieldConfig.errors">
+      <mat-error
+        *ngIf="formGroup.controls[fieldConfig.key].touched && formGroup.controls[fieldConfig.key].hasError(error.key)"
+      >
+        {{ error.text }}
+      </mat-error>
+    </ng-container> -->
+    <mat-error
+      *ngIf="
+        formGroup.controls[fieldConfig.key].invalid &&
+        (formGroup.controls[fieldConfig.key].touched || formGroup.controls[fieldConfig.key].dirty)
+      "
+    >
+      {{ getErrorMessage() }}
+    </mat-error>
+  </mat-form-field>
+</div>

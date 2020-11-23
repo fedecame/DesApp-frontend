@@ -1,4 +1,4 @@
-<form [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
+<!-- <form [formGroup]="addressForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="shipping-card">
     <mat-card-header>
       <mat-card-title>Shipping Information</mat-card-title>
@@ -102,4 +102,23 @@
       <button mat-raised-button color="primary" type="submit">Submit</button>
     </mat-card-actions>
   </mat-card>
-</form>
+</form> -->
+
+<div class="desapp-form-container" *ngIf="form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit.next(form.value)">
+    <mat-card class="desapp-form-card">
+      <mat-card-header>
+        <mat-card-title>{{ formTitle }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let field of formFields" class="desapp-form-field-container">
+          <div [formGroup]="form"></div>
+          <app-desapp-dynamic-form-field [fieldConfig]="field" [formGroup]="form"></app-desapp-dynamic-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

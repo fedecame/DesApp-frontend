@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { combineLatest, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
+import { DesappCheckUserStatusService } from '../auth-utils/desapp-check-user-status.service';
 import { User } from '../models/User';
 
 @Component({
@@ -18,12 +19,14 @@ export class DesappProfileComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private desappApis: DesappBeApisService,
-    public auth: AuthService
+    public auth: AuthService,
+    private desappUserStatusService: DesappCheckUserStatusService
   ) {}
 
   ngOnInit(): void {
     // this.user$ = this.desappApis.getUser(1);
     // this.user$ = this.desappApis.getUserByMail('paismariano@gmail.com');
+    this.desappUserStatusService.redirectForUserDataIfNeeded();
     this.user$ = this.auth.user$;
     this.desappApis.loginValidateWithBE().subscribe((response) => console.log('respuesta login: ', response));
 

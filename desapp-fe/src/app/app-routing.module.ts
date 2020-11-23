@@ -9,6 +9,7 @@ import { DesappProjectListsComponent } from './desapp-project-lists/desapp-proje
 import { DesappRegisterComponent } from './desapp-register/desapp-register.component';
 
 import { AuthGuard } from '@auth0/auth0-angular';
+import { DesappCompleteUserDataComponent } from './desapp-complete-user-data/desapp-complete-user-data.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
       { path: 'profile', component: DesappProfileComponent, canActivate: [AuthGuard] },
       { path: 'projects/:id', component: DesappProjectDetailComponent, canActivate: [AuthGuard] },
       // { path: 'login', component: DesappLoginComponent, canActivate: [AuthGuard] },
+      { path: 'complete_missing_user_data', component: DesappCompleteUserDataComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },

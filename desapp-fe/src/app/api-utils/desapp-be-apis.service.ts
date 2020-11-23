@@ -65,4 +65,14 @@ export class DesappBeApisService {
   loginValidateWithBE() {
     return this.http.get<string>(`${this.BASE_URL}/login`);
   }
+
+  createOrUpdateUserInBE({ username, email, nickname }) {
+    return this.http.post(`${this.BASE_URL}/update_user`, {
+      username,
+      email,
+      nickname,
+      password: '',
+      points: 0,
+    });
+  }
 }
