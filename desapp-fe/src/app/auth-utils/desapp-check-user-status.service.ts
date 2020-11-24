@@ -16,7 +16,18 @@ export class DesappCheckUserStatusService {
     // this.subscriptions.push(
     this.isUserDataIncomplete$ = this.auth.user$.pipe(
       // TODO (posible mejora): si armo un endpoint de "getUser" que no pida el mail, refactorizar esto..no necesitaria armar una "tupla"
-      map((user) => !user.email || !user['https://desappfe.com/username'] || !user['https://desappfe.com/nickname'])
+      map((user) => [!user['https://desappfe.com/username'] || !user['https://desappfe.com/nickname'], user]),
+      switchMap(([isUserIncomplete, user]) =>
+        isUserIncomplete
+          ? this.desappApiService.getUserByMail(user.email).pipe(
+              catchError((error) => {
+                console.error(error);
+                return of(null);
+              }),
+              map((userBE) => userBE === null)
+            )
+          : of(false)
+      )
 
       // map((user) => [
       //   !localStorage.getItem('https://desappfe.com/user_updated') || user['https://desappfe.com/is_new'],

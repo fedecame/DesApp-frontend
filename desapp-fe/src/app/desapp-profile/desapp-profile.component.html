@@ -1,44 +1,54 @@
-<div class="grid-container">
-  <h1 class="mat-h1">{{ (user$ | async)?.username }}</h1>
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards$ | async" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{ card.title }}
-            <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu> -->
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <mat-list role="list">
-            <mat-list-item class="card-field-row" role="listitem" *ngFor="let field of card.fields; let i = index"
-              ><div class="card-field-label">{{ field.label }}:</div>
-              <div class="card-field-value">{{ field.value }}</div>
-              <mat-divider *ngIf="i < card.fields.length - 1"></mat-divider
-            ></mat-list-item>
-          </mat-list>
-        </mat-card-content>
-        <mat-card-actions>
-          <!-- <button mat-flat-button color="primary" class="change-pass-button" (click)="openChangePassDialog()">
-            Change Password
-          </button> -->
-          <button mat-flat-button color="warn" class="edit-profile-button" (click)="openEditProfileForm()">
-            Edit Profile
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+<div *ngIf="editProfile$ | async; else read_only">
+  <app-desapp-form
+    [form]="editProfileForm$ | async"
+    [formFields]="fieldsConfig"
+    [formTitle]="'Edit Profile'"
+    (onSubmit)="submitEditProfile($event)"
+  ></app-desapp-form>
 </div>
+<ng-template #read_only>
+  <div class="grid-container">
+    <h1 class="mat-h1">{{ (user$ | async)?.username }}</h1>
+    <mat-grid-list cols="2" rowHeight="350px">
+      <mat-grid-tile *ngFor="let card of cards$ | async" [colspan]="card.cols" [rowspan]="card.rows">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              {{ card.title }}
+              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item>Expand</button>
+                <button mat-menu-item>Remove</button>
+              </mat-menu> -->
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <mat-list role="list">
+              <mat-list-item class="card-field-row" role="listitem" *ngFor="let field of card.fields; let i = index"
+                ><div class="card-field-label">{{ field.label }}:</div>
+                <div class="card-field-value">{{ field.value }}</div>
+                <mat-divider *ngIf="i < card.fields.length - 1"></mat-divider
+              ></mat-list-item>
+            </mat-list>
+          </mat-card-content>
+          <mat-card-actions>
+            <!-- <button mat-flat-button color="primary" class="change-pass-button" (click)="openChangePassDialog()">
+              Change Password
+            </button> -->
+            <button mat-flat-button color="warn" class="edit-profile-button" (click)="openEditProfileForm()">
+              Edit Profile
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
 
-<app-desapp-donations-table
-  [title]="(user$ | async)?.username + '\'s Donations'"
-  [donations$]="donations$"
-  [displayedColumns$]="displayedColumns$"
-></app-desapp-donations-table>
+  <app-desapp-donations-table
+    [title]="(user$ | async)?.username + '\'s Donations'"
+    [donations$]="donations$"
+    [displayedColumns$]="displayedColumns$"
+  ></app-desapp-donations-table>
+</ng-template>

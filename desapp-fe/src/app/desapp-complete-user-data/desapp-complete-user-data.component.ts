@@ -38,6 +38,9 @@ export class DesappCompleteUserDataComponent implements OnInit {
       key: 'username',
       label: 'Username',
       errors: [fieldErrorMessages.required, fieldErrorMessages.minlength, fieldErrorMessages.maxlength],
+      options: {
+        placeholder: 'Enter your username',
+      },
     }),
     new FieldConfig({
       key: 'email',
@@ -92,8 +95,8 @@ export class DesappCompleteUserDataComponent implements OnInit {
         filter((isUserIncomplete) => !isUserIncomplete)
       )
       .subscribe((_) => {
-        console.log('redirect to homeeeeeeeeeeeeeeeeee');
-        // this.router.navigate(['']);
+        console.log('redirect to home');
+        this.router.navigate(['']);
       });
     this.auth.user$.subscribe((user) => {
       this.username = user['https://desappfe.com/username'];
@@ -131,7 +134,7 @@ export class DesappCompleteUserDataComponent implements OnInit {
     this.desappApis
       .createOrUpdateUserInBE({
         nickname: formValue.nickname,
-        username: this.username,
+        username: formValue.username,
         email: this.email,
       })
       .pipe(
