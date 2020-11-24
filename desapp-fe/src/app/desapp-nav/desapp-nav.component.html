@@ -35,9 +35,10 @@
       <span class="toolbar-spacer"></span>
       <fa-icon [icon]="faUserCircle" size="2x" [matMenuTriggerFor]="menu" class="user-avatar"></fa-icon>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLinkActive="active-route" routerLink="/profile"><span>Profile</span></button>
-        <button mat-menu-item disabled><span>My Projects</span></button>
-        <button mat-menu-item routerLink="/login"><span>Logout</span></button>
+        <ng-container *ngIf="auth.isAuthenticated$ | async">
+          <button mat-menu-item routerLinkActive="active-route" routerLink="/profile"><span>Profile</span></button>
+          <button mat-menu-item disabled><span>My Projects</span></button>
+        </ng-container>
         <app-auth-button></app-auth-button>
       </mat-menu>
     </mat-toolbar>

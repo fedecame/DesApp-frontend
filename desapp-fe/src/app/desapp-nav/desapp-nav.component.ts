@@ -5,6 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-desapp-nav',
@@ -19,7 +20,11 @@ export class DesappNavComponent {
     shareReplay()
   );
 
-  constructor(private breakpointObserver: BreakpointObserver, private apiServiceBE: DesappBeApisService) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private apiServiceBE: DesappBeApisService,
+    public auth: AuthService
+  ) {}
 
   fetchProjects() {
     this.apiServiceBE.getAllProjects().subscribe((projects) => {
