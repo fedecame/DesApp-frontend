@@ -2,7 +2,7 @@ import { state } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { catchError, finalize, map, tap } from 'rxjs/operators';
+import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { LocationDesApp } from '../models/LocationDesApp';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
 import { DesappDonationDialogComponent } from '../desapp-donation-dialog/desapp-donation-dialog.component';
+import { AuthService } from '@auth0/auth0-angular';
 
 export interface ProjectDetailItem extends Project {
   missingPercentage: string;
@@ -44,7 +45,8 @@ export class DesappProjectDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private desappApis: DesappBeApisService,
     private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -153,11 +155,13 @@ export class DesappProjectDetailComponent implements OnInit {
       console.log('The dialog was closed');
       console.log('reulstadoo: ', result);
       if (result !== undefined && result.amount > 0) {
-        this.desappApis.donate({
-          projectId: this.project.id,
-          userId: 1,
-          amount: result.amount,
-          comment: result.comment,
+        this.auth.user$.pipe(switchMap((user) => this.desappApis.getUserByMail(user.email))).subscribe((userBE) => {
+          this.desappApis.donate({
+            projectId: this.project.id,
+            userId: userBE.id,
+            amount: result.amount,
+            comment: result.comment,
+          });
         });
       }
       // console.log('this.donationAmount: ', this.donationAmount);
