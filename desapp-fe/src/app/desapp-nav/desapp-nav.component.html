@@ -31,7 +31,12 @@
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>[CSAC] Crowdfunding Solidario Argentina Conectada</span>
+      <ng-container *ngIf="isHandset$ | async; else complete_title">
+        <span>[CSAC]</span>
+      </ng-container>
+      <ng-template #complete_title>
+        <span>[CSAC] Crowdfunding Solidario Argentina Conectada</span>
+      </ng-template>
       <span class="toolbar-spacer"></span>
       <fa-icon [icon]="faUserCircle" size="2x" [matMenuTriggerFor]="menu" class="user-avatar"></fa-icon>
       <mat-menu #menu="matMenu">
