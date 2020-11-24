@@ -1,10 +1,13 @@
 <div *ngIf="editProfile$ | async; else read_only">
-  <app-desapp-form
-    [form]="editProfileForm$ | async"
-    [formFields]="fieldsConfig"
-    [formTitle]="'Edit Profile'"
-    (onSubmit)="submitEditProfile($event)"
-  ></app-desapp-form>
+  <div>
+    <app-desapp-form
+      [form]="editProfileForm$ | async"
+      [formFields]="fieldsConfig"
+      [formTitle]="'Edit Profile'"
+      (onSubmit)="submitEditProfile($event)"
+      (cancelForm)="cancelEditProfile()"
+    ></app-desapp-form>
+  </div>
 </div>
 <ng-template #read_only>
   <div class="grid-container">

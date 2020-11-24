@@ -23,7 +23,10 @@ export class DesappProfileComponent implements OnInit, OnDestroy {
   donations$ = new BehaviorSubject<Donation[]>([]);
   displayedColumns$ = of(['amount', 'date', 'comment']);
   editProfile$ = new BehaviorSubject<boolean>(false);
-  editProfileForm$ = new Subject<FormGroup>();
+  editProfileForm$ = new BehaviorSubject<FormGroup>(null);
+  profileUpdated = false;
+  user: User;
+  editForm: FormGroup;
 
   fieldsConfig: FieldConfig[] = [
     new FieldConfig({
@@ -89,6 +92,7 @@ export class DesappProfileComponent implements OnInit, OnDestroy {
             console.log('userBE: ', userBE);
             if (userBE) {
               this.user$.next(userBE);
+              this.user = userBE;
               this.donations$.next(userBE.donations);
             } else {
               this.desappApis
@@ -107,6 +111,7 @@ export class DesappProfileComponent implements OnInit, OnDestroy {
                 .subscribe((updatedUser) => {
                   console.log('user updated/created: ', updatedUser);
                   this.user$.next(updatedUser);
+                  this.user = updatedUser;
                   this.donations$.next(updatedUser.donations);
                 });
             }
@@ -160,44 +165,45 @@ export class DesappProfileComponent implements OnInit, OnDestroy {
   }
 
   createEditForm(user: User): void {
-    this.editProfileForm$.next(
-      this.fb.group({
-        username: [
-          { value: user.username, disabled: user.username?.length > 0 },
-          {
-            validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
-            updateOn: 'change',
-          },
-        ],
-        email: [
-          { value: user.email, disabled: true },
-          { validators: [Validators.required], updateOn: 'change' },
-        ],
-        nickname: [
-          user.nickname,
-          {
-            validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
-            updateOn: 'change',
-          },
-        ],
-        points: [
-          { value: user.points, disabled: true },
-          {
-            validators: [Validators.required],
-            updateOn: 'change',
-          },
-        ],
-        // password: [null, Validators.required],
-      })
-    );
+    const createdForm = this.fb.group({
+      username: [
+        { value: user.username, disabled: user.username?.length > 0 },
+        {
+          validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
+          updateOn: 'change',
+        },
+      ],
+      email: [
+        { value: user.email, disabled: true },
+        { validators: [Validators.required], updateOn: 'change' },
+      ],
+      nickname: [
+        user.nickname,
+        {
+          validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
+          updateOn: 'change',
+        },
+      ],
+      points: [
+        { value: user.points, disabled: true },
+        {
+          validators: [Validators.required],
+          updateOn: 'change',
+        },
+      ],
+      // password: [null, Validators.required],
+    });
+    this.editProfileForm$.next(createdForm);
+    this.profileUpdated = true;
+    this.editForm = createdForm;
   }
 
   submitEditProfile(formValue) {
     this.desappApis
       .createOrUpdateUserInBE({
         nickname: formValue.nickname,
-        username: formValue.username,
-        email: formValue.email,
+        username: formValue.username || this.user.username,
+        email: formValue.email || this.user.email,
       })
       .pipe(
         catchError((error) => {
@@ -218,6 +224,17 @@ export class DesappProfileComponent implements OnInit, OnDestroy {
 
   cancelEditProfile(): void {
     this.editProfile$.next(false);
+    if (this.profileUpdated) {
+      this.desappApis.getUserByMail(this.user.email).subscribe((updatedUser) => {
+        // reinicio el form con los valores correspondientes
+        this.editForm.setValue({
+          username: updatedUser.username,
+          email: updatedUser.email,
+          nickname: updatedUser.nickname,
+          points: updatedUser.points,
+        });
+      });
+    }
   }
 
   openEditProfileForm(): void {

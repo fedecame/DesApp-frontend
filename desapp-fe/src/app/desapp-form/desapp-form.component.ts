@@ -12,7 +12,9 @@ export class DesappFormComponent {
   @Input() form: FormGroup;
   @Input() formFields: FieldConfig[] = [];
   @Input() formTitle: string;
+  @Input() hideCancelButton: boolean = false;
   @Output() onSubmit = new EventEmitter();
+  @Output() cancelForm = new EventEmitter();
 
   // addressForm = this.fb.group({
   //   company: null,

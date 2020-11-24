@@ -117,7 +117,8 @@
         </div>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Submit</button>
+        <button mat-raised-button color="warn" type="submit" [disabled]="form.invalid">Submit</button>
+        <button mat-raised-button color="primary" *ngIf="!hideCancelButton" (click)="cancelForm.next()">Cancel</button>
       </mat-card-actions>
     </mat-card>
   </form>

@@ -134,7 +134,7 @@ export class DesappCompleteUserDataComponent implements OnInit {
     this.desappApis
       .createOrUpdateUserInBE({
         nickname: formValue.nickname,
-        username: formValue.username,
+        username: formValue.username || this.username,
         email: this.email,
       })
       .pipe(

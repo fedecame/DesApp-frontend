@@ -2,5 +2,6 @@
   [form]="formGroup | async"
   [formFields]="fieldsConfig"
   [formTitle]="'Please Complete Missing User Data'"
+  [hideCancelButton]="true"
   (onSubmit)="onSubmit($event)"
 ></app-desapp-form>
