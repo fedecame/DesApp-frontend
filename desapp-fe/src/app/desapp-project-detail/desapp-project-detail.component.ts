@@ -1,6 +1,6 @@
 import { state } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { catchError, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
@@ -46,7 +46,8 @@ export class DesappProjectDetailComponent implements OnInit {
     private desappApis: DesappBeApisService,
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
-    public auth: AuthService
+    public auth: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -174,7 +175,17 @@ export class DesappProjectDetailComponent implements OnInit {
     console.log('projectId: ', this.project.id);
     this.desappApis
       .connectProject(this.project.id)
-      .subscribe((res) => console.log('connected project response: ', res));
+      .pipe(
+        catchError((err) => {
+          console.error('connect project error: ', err);
+          return of(null);
+        })
+      )
+      .subscribe((res) => {
+        // TODO: mostrar mensaje de exito (en snackbar idealmente)
+        console.log('connected project response: ', res);
+        this.router.navigate(['']);
+      });
   }
 
   getAllUsersDonations(users: User[]): Donation[] {
