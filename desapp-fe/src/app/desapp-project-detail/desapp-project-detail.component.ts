@@ -1,11 +1,12 @@
 import { state } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
+import { formatMoneyAmount } from '../format-utils/desapp-money-format';
 
 import { Donation } from '../models/Donation';
 import { LocationDesApp } from '../models/LocationDesApp';
@@ -14,7 +15,7 @@ import { User } from '../models/User';
 import { DesappDonationDialogComponent } from '../desapp-donation-dialog/desapp-donation-dialog.component';
 
 export interface ProjectDetailItem extends Project {
-  missingPercentage: number;
+  missingPercentage: string;
 }
 
 export interface DialogData {
@@ -33,6 +34,8 @@ export class DesappProjectDetailComponent implements OnInit {
   project$: Observable<ProjectDetailItem>;
   location$: Observable<LocationDesApp>;
   users$: Observable<User[]>;
+  donations$ = new BehaviorSubject<Donation[]>([]);
+  displayedColumns$ = of(['nickname', 'date', 'amount', 'comment']);
 
   cards$: Observable<any>;
   project: Project;
@@ -48,11 +51,14 @@ export class DesappProjectDetailComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const id = +params.get('id');
       this.project$ = this.desappApis.getProject(id).pipe(
+        tap((project) => console.log('PROJECT: ', project)),
+        tap((project) => this.donations$.next(this.getAllUsersDonations(project.users))),
         // catchError(() => of({})), // TODO: Aca deberia mostrar un dialog o un alert que indique que fallo el request.
         finalize(() => console.log('pasar loading del spinner a false')), // TODO: spinner con loading.
         map((project) => {
           return {
             ...project,
+            raisedFunds: formatMoneyAmount(project.raisedFunds),
             missingPercentage: this.calcularPorcentajeFaltante(project), // TODO: esto deberia venir directamente del BE.
           };
         })
@@ -123,11 +129,12 @@ export class DesappProjectDetailComponent implements OnInit {
     });
   }
 
-  calcularPorcentajeFaltante(project: Project): number {
+  calcularPorcentajeFaltante(project: Project): string {
     const maximoRequerido = project.location.population * project.factor;
     const cantidadNecesaria = (maximoRequerido * project.minClosePercentage) / 100;
-    const procentajeAcumuladoParaCantNecesaria = (project.raisedFunds / cantidadNecesaria) * 100;
-    return 100 - procentajeAcumuladoParaCantNecesaria;
+    const procentajeAcumuladoParaCantNecesaria = (+project.raisedFunds / cantidadNecesaria) * 100;
+    const resultado = 100 - procentajeAcumuladoParaCantNecesaria;
+    return `${resultado.toFixed(2)} %`;
   }
 
   openDonationDialog(event): void {
@@ -157,6 +164,19 @@ export class DesappProjectDetailComponent implements OnInit {
       // console.log('this.donationComment: ', this.donationComment);
       // this.animal = result;
     });
+  }
+
+  connectProject(): void {
+    console.log('projectId: ', this.project.id);
+    this.desappApis
+      .connectProject(this.project.id)
+      .subscribe((res) => console.log('connected project response: ', res));
+  }
+
+  getAllUsersDonations(users: User[]): Donation[] {
+    // TODO: Aca estoy mostrando todas las donaciones de los usuarios que donaron a este proyecto, necesito una forma de vincular "proyecto" con "donacion" y tiene que ser desde el BE, al menos q me pase un id de algun de los 2.
+    const donations = users.reduce((donationsAccum, userActual) => donationsAccum.concat(userActual.donations), []);
+    return donations;
   }
 }
 

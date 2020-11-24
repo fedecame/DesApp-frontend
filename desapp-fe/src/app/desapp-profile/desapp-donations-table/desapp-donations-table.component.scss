@@ -1,0 +1,21 @@
+.full-width-table {
+  width: 100%;
+}
+
+.donation-table-container {
+  padding: 1rem 36px 2rem 36px;
+}
+
+.table-title {
+  background-color: grey;
+  width: fit-content;
+  padding: 0.7rem;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.row-hoverable {
+  &:hover {
+    filter: brightness(1.2);
+  }
+}

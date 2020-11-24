@@ -17,6 +17,7 @@ export class DesappDynamicFormFieldComponent implements OnInit {
 
   getErrorMessage(): string {
     const errors = this.fieldConfig.errors;
+    console.log('errors: ', this.formGroup.controls);
     for (const error of errors) {
       if (this.formGroup.controls[this.fieldConfig.key].hasError(error.key)) {
         return error.text;

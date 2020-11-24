@@ -35,8 +35,8 @@ export class DesappTableComponent implements AfterViewInit, OnInit, OnDestroy {
               id: project.id,
               name: project.name,
               participantsAmount: project.users.length, // TODO: Cambiar esto en lo posible, que el BE me de la cantidad de participantes.
-              collectedAmount: project.raisedFunds,
-              collectedPercentage: (project.raisedFunds / (project.location.population * project.factor)) * 100, // TODO: IMPORTANTE ver como obtener esto desde el BE, no esta bueno hacer la cuenta en el FE..sino minimamente guardarla en otro lado antes (state management: NgRx D':)
+              collectedAmount: +project.raisedFunds,
+              collectedPercentage: (+project.raisedFunds / (project.location.population * project.factor)) * 100, // TODO: IMPORTANTE ver como obtener esto desde el BE, no esta bueno hacer la cuenta en el FE..sino minimamente guardarla en otro lado antes (state management: NgRx)
             };
           });
         })

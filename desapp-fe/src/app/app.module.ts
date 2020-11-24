@@ -46,6 +46,7 @@ import { environment as env } from '../environments/environment';
 import { AuthButtonComponent } from './auth-button/auth-button.component';
 import { DesappCompleteUserDataComponent } from './desapp-complete-user-data/desapp-complete-user-data.component';
 import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/desapp-dynamic-form-field.component';
+import { DesappDonationsTableComponent } from './desapp-profile/desapp-donations-table/desapp-donations-table.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/des
     AuthButtonComponent,
     DesappCompleteUserDataComponent,
     DesappDynamicFormFieldComponent,
+    DesappDonationsTableComponent,
   ],
   imports: [
     BrowserModule,
@@ -102,6 +104,21 @@ import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/des
       // audience: 'http://localhost:8090',
       httpInterceptor: {
         allowedList: [
+          // {
+          //   uri: 'http://localhost:8090/projects/11/state/2',
+          //   tokenOptions: {
+          //     audience: 'http://localhost:8090',
+          //     scope: 'write:projects',
+          //   },
+          // },
+          {
+            uri: 'http://localhost:8090/project_state',
+            httpMethod: HttpMethod.Post,
+            tokenOptions: {
+              audience: 'http://localhost:8090',
+              // scope: 'write:projects',
+            },
+          },
           {
             uri: 'http://localhost:8090/*',
             tokenOptions: {
@@ -120,7 +137,7 @@ import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/des
           //   httpMethod: HttpMethod.Delete,
           //   tokenOptions: {
           //     audience: env.auth.audience,
-          //     scope: 'delete:project',
+          //     scope: 'delete:projects',
           //   },
           // },
           // {
@@ -128,7 +145,7 @@ import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/des
           //   httpMethod: HttpMethod.Post,
           //   tokenOptions: {
           //     audience: env.auth.audience,
-          //     scope: 'write:project',
+          //     scope: 'write:projects',
           //   },
           // },
           // {
@@ -136,7 +153,7 @@ import { DesappDynamicFormFieldComponent } from './desapp-dynamic-form-field/des
           //   httpMethod: HttpMethod.Put,
           //   tokenOptions: {
           //     audience: env.auth.audience,
-          //     scope: 'write:project',
+          //     scope: 'write:projects',
           //   },
           // },
           // {

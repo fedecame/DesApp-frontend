@@ -25,11 +25,20 @@
           </mat-list>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-flat-button color="primary" class="change-pass-button" (click)="openChangePassDialog()">
+          <!-- <button mat-flat-button color="primary" class="change-pass-button" (click)="openChangePassDialog()">
             Change Password
+          </button> -->
+          <button mat-flat-button color="warn" class="edit-profile-button" (click)="openEditProfileForm()">
+            Edit Profile
           </button>
         </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
+
+<app-desapp-donations-table
+  [title]="(user$ | async)?.username + '\'s Donations'"
+  [donations$]="donations$"
+  [displayedColumns$]="displayedColumns$"
+></app-desapp-donations-table>

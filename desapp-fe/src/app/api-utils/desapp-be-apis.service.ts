@@ -54,7 +54,7 @@ export class DesappBeApisService {
 
   postLoginWithMail(email: string) {
     return this.http.post(`${this.BASE_URL}/login`, {
-      email: email,
+      email,
     });
   }
 
@@ -67,12 +67,26 @@ export class DesappBeApisService {
   }
 
   createOrUpdateUserInBE({ username, email, nickname }) {
+    // TODO: modificar endpoint en BE para que no pida password ni points.
+    // Ya no tiene sentido el password en el BE directamente.
     return this.http.post(`${this.BASE_URL}/update_user`, {
       username,
       email,
       nickname,
       password: '',
       points: 0,
+    });
+  }
+
+  suspendProject(projectId: number) {
+    return this.http.put(`${this.BASE_URL}/projects/${projectId}/state/3`, {});
+  }
+
+  connectProject(projectId: number) {
+    // return this.http.put(`${this.BASE_URL}/projects/${projectId}/state/2`, {});
+    return this.http.post<string>(`${this.BASE_URL}/project_state`, {
+      projectId,
+      stateId: 2,
     });
   }
 }

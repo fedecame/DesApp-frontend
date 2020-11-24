@@ -33,7 +33,18 @@
         <mat-card-actions *ngIf="card.fields?.length < 4">
           <button mat-raised-button color="warn" class="donation-button" (click)="openDonationDialog()">Donate</button>
         </mat-card-actions>
+        <mat-card-actions *ngIf="card.fields?.length >= 4">
+          <button mat-raised-button color="warn" class="connect-project-button" (click)="connectProject()">
+            Connect Project
+          </button>
+        </mat-card-actions>
       </mat-card>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
+
+<app-desapp-donations-table
+  [title]="(project$ | async)?.name + '\'s Donations'"
+  [donations$]="donations$"
+  [displayedColumns$]="displayedColumns$"
+></app-desapp-donations-table>

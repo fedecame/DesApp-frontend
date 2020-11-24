@@ -1,3 +1,5 @@
+import { Donation } from './Donation';
+
 export interface User {
   id: number;
   username: string;
@@ -5,4 +7,5 @@ export interface User {
   password: string;
   nickname: string;
   points: number;
+  donations?: Donation[];
 }

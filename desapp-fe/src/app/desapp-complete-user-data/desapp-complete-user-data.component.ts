@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject, of, Subject } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import { catchError, filter, tap } from 'rxjs/operators';
 import { DesappBeApisService } from '../api-utils/desapp-be-apis.service';
+import { DesappCheckUserStatusService } from '../auth-utils/desapp-check-user-status.service';
 import { FieldConfig } from '../models/FieldConfig';
 import { fieldErrorMessages } from '../models/FieldErrorMessages';
 
@@ -17,6 +18,7 @@ export class DesappCompleteUserDataComponent implements OnInit {
   formGroup = new Subject<FormGroup>();
   username: string;
   email: string;
+  nickname: string;
 
   // this.fb.group({
   //   username: [
@@ -35,7 +37,7 @@ export class DesappCompleteUserDataComponent implements OnInit {
     new FieldConfig({
       key: 'username',
       label: 'Username',
-      errors: [fieldErrorMessages.required],
+      errors: [fieldErrorMessages.required, fieldErrorMessages.minlength, fieldErrorMessages.maxlength],
     }),
     new FieldConfig({
       key: 'email',
@@ -45,7 +47,7 @@ export class DesappCompleteUserDataComponent implements OnInit {
     new FieldConfig({
       key: 'nickname',
       label: 'Nickname',
-      errors: [fieldErrorMessages.required],
+      errors: [fieldErrorMessages.required, fieldErrorMessages.minlength, fieldErrorMessages.maxlength],
       options: {
         placeholder: 'Enter your nickname',
       },
@@ -77,25 +79,48 @@ export class DesappCompleteUserDataComponent implements OnInit {
     private fb: FormBuilder,
     public auth: AuthService,
     private desappApis: DesappBeApisService,
-    private router: Router
+    private router: Router,
+    private desappUserStatusService: DesappCheckUserStatusService
   ) {}
 
   ngOnInit(): void {
+    // TODO: Agregar subscriptions y desuscribir en onDestroy.
+    // TODO (posible mejora): ver si puedo reemplazar la logica de redireccion a "home" por un Guard del Router.
+    this.desappUserStatusService.isUserDataIncomplete$
+      .pipe(
+        tap((isUserIncomplete) => console.log('isUserIncomplete: ', isUserIncomplete)),
+        filter((isUserIncomplete) => !isUserIncomplete)
+      )
+      .subscribe((_) => {
+        console.log('redirect to homeeeeeeeeeeeeeeeeee');
+        // this.router.navigate(['']);
+      });
     this.auth.user$.subscribe((user) => {
       this.username = user['https://desappfe.com/username'];
       this.email = user.email;
+      this.nickname = user['https://desappfe.com/nickname'];
       console.log('user: ', user);
+      console.log('this.username: ', this.username);
       this.formGroup.next(
         this.fb.group({
           username: [
-            { value: this.username, disabled: true },
-            { validators: [Validators.required], updateOn: 'change' },
+            { value: this.username, disabled: this.username?.length > 0 },
+            {
+              validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
+              updateOn: 'change',
+            },
           ],
           email: [
             { value: this.email, disabled: true },
             { validators: [Validators.required], updateOn: 'change' },
           ],
-          nickname: [null, { validators: [Validators.required], updateOn: 'change' }],
+          nickname: [
+            this.nickname,
+            {
+              validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)],
+              updateOn: 'change',
+            },
+          ],
           // password: [null, Validators.required],
         })
       );
@@ -112,7 +137,7 @@ export class DesappCompleteUserDataComponent implements OnInit {
       .pipe(
         catchError((error) => {
           console.error('user update/create error: ', error);
-          //TODO: Mostrar mensaje de error (en un snackbar o un modal por ej.)
+          // TODO: Mostrar mensaje de error (en un snackbar o un modal por ej.)
           return of(null);
         })
       )

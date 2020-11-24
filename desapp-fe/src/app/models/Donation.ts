@@ -3,4 +3,5 @@ export interface Donation {
   amount: number;
   comment: string;
   date: string;
+  userNickname?: string;
 }

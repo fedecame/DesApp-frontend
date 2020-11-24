@@ -10,7 +10,7 @@ export interface Project {
   location: LocationDesApp;
   minClosePercentage: number;
   name: string;
-  raisedFunds: number;
+  raisedFunds: number | string;
   startDate: string;
   state: string;
   users: User[];
