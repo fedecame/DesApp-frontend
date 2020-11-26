@@ -52,19 +52,19 @@ export class DesappBeApisService {
       .subscribe();
   }
 
-  postLoginWithMail(email: string) {
-    return this.http.post(`${this.BASE_URL}/login`, {
-      email,
-    });
-  }
+  // postLoginWithMail(email: string) {
+  //   return this.http.post(`${this.BASE_URL}/login`, {
+  //     email,
+  //   });
+  // }
 
   getUserByMail(email: string) {
     return this.http.get<User>(`${this.BASE_URL}/users/${email}`);
   }
 
-  loginValidateWithBE() {
-    return this.http.get<string>(`${this.BASE_URL}/login`);
-  }
+  // loginValidateWithBE() {
+  //   return this.http.get<string>(`${this.BASE_URL}/login`);
+  // }
 
   createOrUpdateUserInBE({ username, email, nickname }) {
     // TODO: modificar endpoint en BE para que no pida password ni points.

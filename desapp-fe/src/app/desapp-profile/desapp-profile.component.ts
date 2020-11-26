@@ -120,7 +120,7 @@ export class DesappProfileComponent implements OnInit, OnDestroy {
       }
     });
     // this.user$ = this.auth.user$;
-    this.desappApis.loginValidateWithBE().subscribe((response) => console.log('respuesta login: ', response));
+    // this.desappApis.loginValidateWithBE().subscribe((response) => console.log('respuesta login: ', response));
 
     this.user$.pipe(filter((user) => user != null)).subscribe((user) => {
       console.log('user for form creation: ', user);
